@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
+         version="4.0">
+
+    <filter>
+        <filter-name>CloseConnectionFilter</filter-name>
+        <filter-class>com.atguigu.filter.CloseConnectionFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>CloseConnectionFilter</filter-name>
+        <!--所有功能都要用到数据库的都要关连接-->
+        <url-pattern>/bookManager</url-pattern>
+        <url-pattern>/protected/orderClient</url-pattern>
+        <url-pattern>/index.html</url-pattern>
+        <url-pattern>/user</url-pattern>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>TransactionFilter</filter-name>
+        <filter-class>com.atguigu.filter.TransactionFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>TransactionFilter</filter-name>
+        <url-pattern>/protected/orderClient</url-pattern>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>LoginFilter</filter-name>
+        <filter-class>com.atguigu.filter.LoginFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>LoginFilter</filter-name>
+        <url-pattern>/protected/*</url-pattern>
+    </filter-mapping>
+
+
+
+    
+    <servlet>
+        <servlet-name>PortalServlet</servlet-name>
+        <servlet-class>com.atguigu.servlet.model.PortalServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UserServlet</servlet-name>
+        <servlet-class>com.atguigu.servlet.model.UserServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AdminServlet</servlet-name>
+        <servlet-class>com.atguigu.servlet.model.AdminServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>BookManagerServlet</servlet-name>
+        <servlet-class>com.atguigu.servlet.model.BookManagerServlet</servlet-class>
+    </servlet>
+
+    <!--配置kaptchaServlet，这个servlet是在kaptcha-2.3.2.jar内的，用来生成验证码图片的-->
+    <servlet>
+        <servlet-name>KaptchaServlet</servlet-name>
+        <servlet-class>com.google.code.kaptcha.servlet.KaptchaServlet</servlet-class>
+        <!--配置初始化参数-->
+        <!--<init-param>
+            &lt;!&ndash;kaptcha-2.3.2.jar默认用kaptcha.session.key拿到session的key，这边我设置的key的名字是checkCode，而kaptcha.session.key不能变，是底层用的这个名字&ndash;&gt;
+            &lt;!&ndash;然后kaptcha-2.3.2.jar会默认把随机出来的图片对应的数字存在name为checkCode的session域对象中&ndash;&gt;
+            &lt;!&ndash;param-name不能变，固定写法&ndash;&gt;
+            <param-name>kaptcha.session.key</param-name>
+            &lt;!&ndash;param-value就是往session域对象中存储验证码的时候的key&ndash;&gt;
+            &lt;!&ndash;不做这个配置的话存储的session的默认的key是KAPTCHA_SESSION_KEY（就不是我们自己配置的checkCode了）&ndash;&gt;
+            <param-value>checkCode</param-value>
+        </init-param>-->
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>KaptchaServlet</servlet-name>
+        <url-pattern>/kaptcha</url-pattern>
+    </servlet-mapping>
+
+
+
+    <servlet-mapping>
+        <servlet-name>BookManagerServlet</servlet-name>
+        <url-pattern>/bookManager</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AdminServlet</servlet-name>
+        <url-pattern>/admin</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UserServlet</servlet-name>
+        <url-pattern>/user</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>PortalServlet</servlet-name>
+        <url-pattern>/index.html</url-pattern>
+    </servlet-mapping>
+
+    <!--配置前后缀-->
+    <!-- 在上下文参数中配置视图前缀和视图后缀 -->
+    <context-param>
+        <param-name>view-prefix</param-name>
+        <param-value>/WEB-INF/pages/</param-value>
+    </context-param>
+    <context-param>
+        <param-name>view-suffix</param-name>
+        <param-value>.html</param-value>
+    </context-param>
+</web-app>

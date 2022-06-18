@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <title>尚硅谷会员登录页面</title>
+    <base href="/bookstore/"/>
+    <link type="text/css" rel="stylesheet" href="static/css/style.css" />
+    <script src="static/script/vue.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <div id="login_header">
+        <a href="index.html">
+          <img class="logo_img" alt="" src="static/img/logo.gif" />
+        </a>
+      </div>
+
+      <div class="login_banner">
+        <div id="l_content">
+          <span class="login_word">欢迎登录</span>
+        </div>
+
+        <div id="content">
+          <div class="login_form">
+            <div class="login_box">
+              <div class="tit">
+                <h1>尚硅谷会员</h1>
+              </div>
+              <div class="msg_cont">
+                <b></b>
+                <span class="errorMsg" th:text="${errorMessage}" style="color: red">{{errorMessage}}</span>
+              </div>
+              <div class="form">
+                <!--下面这一句话和后面的两句话一样，一个传过去的参数method和对应的值doLogin在action中，一个在隐藏域中
+                  区别就是如果提交方法method（注意两个method是不一样的作用）是get那么只能用在隐藏域中那种，
+                  因为在action中那种会被表单中的name属性的键值对覆盖掉
+                -->
+                <!--<form action="user?method=doLogin" method="post">-->
+
+                <form action="user" method="post">
+                  <!--一定要携带请求参数method-->
+                  <input type="hidden" name="method" value="doLogin" />
+
+                  <label>用户名称：</label>
+                  <input
+                        class="itxt"
+                        type="text"
+                        placeholder="请输入用户名"
+                        autocomplete="off"
+                        tabindex="1"
+                        name="username"
+                        id="username"
+                        v-model="username"
+                />
+                  <br />
+                  <br />
+                  <label>用户密码：</label>
+                  <input
+                          class="itxt"
+                          type="password"
+                          placeholder="请输入密码"
+                          autocomplete="off"
+                          tabindex="1"
+                          name="userPwd"
+                          id="password"
+                          v-model="password"
+                  />
+                  <br />
+                  <br />
+                  <input type="submit" value="登录" id="sub_btn" @click="loginCheck"/>
+                </form>
+                <div class="tit">
+                  <a href="pages/user/regist.html">立即注册</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="bottom">
+      <span>
+        尚硅谷书城.Copyright &copy;2015
+      </span>
+      </div>
+    </div>
+    <script>
+      var vue = new Vue({
+        "el":"#app",
+        "data":{
+            "username":"[[${param.username}]]",
+            "password":"",
+            "errorMessage":""
+        },
+        "methods":{
+          loginCheck(){
+            //判断用户名和密码是否为空
+            if (this.username != "") {
+              if (this.password == ""){
+                //就要阻止表单提交
+                event.preventDefault()
+                //加入提示功能
+                this.errorMessage = "密码不能为空"
+              }
+            }else {
+              //就要阻止表单提交
+              event.preventDefault()
+              //加入提示功能
+              this.errorMessage = "用户名不能为空"
+            }
+          }
+        }
+      });
+    </script>
+  </body>
+</html>
